@@ -24,7 +24,7 @@ public class LoginController {
     public Usuario login(@RequestBody Usuario user) {
         List<Usuario> usuarios = usuarioRepository.findAll();
         Usuario u = usuarios.stream()
-                .filter(usuario -> usuario.getEmail().equals(user.getEmail()) && usuario.getClave().equals(user.getClave()))
+                .filter(usuario -> usuario.getEmail().equals(user.getEmail()) && usuario.getClave().equals(user.getClave()) && usuario.isEstado())
                 .findAny()
                 .orElse(null);
 

@@ -1,7 +1,9 @@
 package com.poli.edu.EAappBack.controller;
 
 import com.poli.edu.EAappBack.exception.ResourceNotFoundException;
+import com.poli.edu.EAappBack.model.Cargo;
 import com.poli.edu.EAappBack.model.Usuario;
+import com.poli.edu.EAappBack.repository.CargoRepository;
 import com.poli.edu.EAappBack.repository.UsuarioRepository;
 import java.util.List;
 import javax.validation.Valid;
@@ -16,10 +18,19 @@ public class UsuarioController {
     @Autowired
     UsuarioRepository usuarioRepository;
 
+    @Autowired
+    CargoRepository cargoRepository;
+
     // Get All Usuarios
     @GetMapping("/usuarios")
     public List<Usuario> getAllUsuarios() {
         return usuarioRepository.findAll();
+    }
+
+    // Get All Cargos
+    @GetMapping("/cargos")
+    public List<Cargo> getAllCargos() {
+        return cargoRepository.findAll();
     }
 
     // Get a Single Usuario

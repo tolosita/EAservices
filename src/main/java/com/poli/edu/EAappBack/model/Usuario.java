@@ -15,11 +15,11 @@ public class Usuario extends AuditModel {
     private Long idUsuario;
 
     @NotBlank
-    @Size(max = 40)
+    @Size(max = 50)
     private String nombre;
 
     @NotBlank
-    @Size(max = 40)
+    @Size(max = 50)
     private String apellidos;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -27,15 +27,16 @@ public class Usuario extends AuditModel {
     private Date fechaNacimiento;
 
     @NotBlank
-    @Size(max = 40)
+    @Size(max = 80)
     private String direccion;
 
     @NotBlank
-    @Size(max = 50)
+    @Column(unique = true)
+    @Size(max = 30)
     private String email;
 
     @NotBlank
-    @Size(max = 20)
+    @Size(max = 30)
     private String clave;
 
     @ManyToOne(fetch = FetchType.EAGER)
