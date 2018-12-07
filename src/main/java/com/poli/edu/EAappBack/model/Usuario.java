@@ -1,5 +1,6 @@
 package com.poli.edu.EAappBack.model;
 
+import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -8,11 +9,11 @@ import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "usuarios")
-public class Usuario extends AuditModel {
+public class Usuario implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idUsuario;
+    private Long id;
 
     @NotBlank
     @Size(max = 50)
@@ -26,7 +27,7 @@ public class Usuario extends AuditModel {
     @NotNull
     private Date fechaNacimiento;
 
-    @NotBlank
+    @NotNull
     @Size(max = 80)
     private String direccion;
 
@@ -40,18 +41,18 @@ public class Usuario extends AuditModel {
     private String clave;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "Cargos_IdCargo", nullable = false)
-    private Cargo cargo;
+    @JoinColumn(name = "role", nullable = false)
+    private Role role;
 
     @NotNull
     private boolean estado;
 
-    public Long getIdUsuario() {
-        return idUsuario;
+    public Long getId() {
+        return id;
     }
 
-    public void setIdUsuario(Long idUsuario) {
-        this.idUsuario = idUsuario;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getNombre() {
@@ -102,12 +103,12 @@ public class Usuario extends AuditModel {
         this.clave = clave;
     }
 
-    public Cargo getCargo() {
-        return cargo;
+    public Role getRole() {
+        return role;
     }
 
-    public void setCargo(Cargo cargo) {
-        this.cargo = cargo;
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     public boolean isEstado() {

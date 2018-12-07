@@ -1,15 +1,15 @@
 package com.poli.edu.EAappBack.controller;
 
 import com.poli.edu.EAappBack.exception.ResourceNotFoundException;
-import com.poli.edu.EAappBack.model.Cargo;
+import com.poli.edu.EAappBack.model.Role;
 import com.poli.edu.EAappBack.model.Usuario;
-import com.poli.edu.EAappBack.repository.CargoRepository;
 import com.poli.edu.EAappBack.repository.UsuarioRepository;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.poli.edu.EAappBack.repository.RoleRepository;
 
 @RestController
 @RequestMapping("/api")
@@ -19,7 +19,7 @@ public class UsuarioController {
     UsuarioRepository usuarioRepository;
 
     @Autowired
-    CargoRepository cargoRepository;
+    RoleRepository cargoRepository;
 
     // Get All Usuarios
     @GetMapping("/usuarios")
@@ -29,7 +29,7 @@ public class UsuarioController {
 
     // Get All Cargos
     @GetMapping("/cargos")
-    public List<Cargo> getAllCargos() {
+    public List<Role> getAllCargos() {
         return cargoRepository.findAll();
     }
 
@@ -61,7 +61,6 @@ public class UsuarioController {
         usuario.setDireccion(usuarioDetails.getDireccion());
         usuario.setEmail(usuarioDetails.getEmail());
         usuario.setClave(usuarioDetails.getClave());
-        usuario.setCargo(usuarioDetails.getCargo());
 
         Usuario updatedUsuario = usuarioRepository.save(usuario);
         return updatedUsuario;

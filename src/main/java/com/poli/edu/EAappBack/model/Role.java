@@ -1,5 +1,6 @@
 package com.poli.edu.EAappBack.model;
 
+import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -9,31 +10,31 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @Entity
-@Table(name = "cargos")
-public class Cargo extends AuditModel {
+@Table(name = "roles")
+public class Role implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idCargo;
+    private Long id;
 
     @NotBlank
     @Size(max = 50)
-    private String nombreCargo;
+    private String nombre;
 
-    public Long getIdCargo() {
-        return idCargo;
+    public Long getId() {
+        return id;
     }
 
-    public void setIdCargo(Long idCargo) {
-        this.idCargo = idCargo;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public String getNombreCargo() {
-        return nombreCargo;
+    public String getNombre() {
+        return nombre;
     }
 
-    public void setNombreCargo(String nombreCargo) {
-        this.nombreCargo = nombreCargo;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
 }

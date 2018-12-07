@@ -22,13 +22,10 @@ public class LoginController {
     // Login of a user
     @PostMapping("/login")
     public Usuario login(@RequestBody Usuario user) {
-        List<Usuario> usuarios = usuarioRepository.findAll();
-        Usuario u = usuarios.stream()
-                .filter(usuario -> usuario.getEmail().equals(user.getEmail()) && usuario.getClave().equals(user.getClave()) && usuario.isEstado())
+        return usuarioRepository.findAll().stream()
+                .filter(u -> u.getEmail().equals(user.getEmail()) && u.getClave().equals(user.getClave()) && u.isEstado())
                 .findAny()
                 .orElse(null);
-
-        return u;
     }
 
     // Recuperar clave of a user
