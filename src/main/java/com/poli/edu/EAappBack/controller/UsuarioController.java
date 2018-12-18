@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.poli.edu.EAappBack.repository.RoleRepository;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @RestController
 @RequestMapping("/api")
@@ -19,10 +21,14 @@ public class UsuarioController {
     UsuarioRepository usuarioRepository;
 
     @Autowired
+    BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @Autowired
     RoleRepository cargoRepository;
 
     // Get All Usuarios
     @GetMapping("/usuarios")
+    @Secured("ADMIN")
     public List<Usuario> getAllUsuarios() {
         return usuarioRepository.findAll();
     }
@@ -43,13 +49,14 @@ public class UsuarioController {
     // Create a new Usuario
     @PostMapping("/usuarios")
     public Usuario createUsuario(@Valid @RequestBody Usuario usuario) {
+        usuario.setClave(bCryptPasswordEncoder.encode(usuario.getClave()));
         usuario.setEstado(true);
         return usuarioRepository.save(usuario);
     }
 
     // Update a Usuario
     @PutMapping("/usuarios/{id}")
-    public Usuario updateUsuario(@PathVariable(value = "id") Long codigo,
+    public ResponseEntity<?> updateUsuario(@PathVariable(value = "id") Long codigo,
             @Valid @RequestBody Usuario usuarioDetails) {
 
         Usuario usuario = usuarioRepository.findById(codigo)
@@ -60,10 +67,11 @@ public class UsuarioController {
         usuario.setFechaNacimiento(usuarioDetails.getFechaNacimiento());
         usuario.setDireccion(usuarioDetails.getDireccion());
         usuario.setEmail(usuarioDetails.getEmail());
-        usuario.setClave(usuarioDetails.getClave());
+        usuario.setClave(bCryptPasswordEncoder.encode(usuario.getClave()));
 
-        Usuario updatedUsuario = usuarioRepository.save(usuario);
-        return updatedUsuario;
+        usuarioRepository.save(usuario);
+
+        return ResponseEntity.ok().build();
     }
 
     // Delete a Usuario
@@ -78,4 +86,31 @@ public class UsuarioController {
         return ResponseEntity.ok().build();
     }
 
+    // Recuperar clave of a user
+//    @PostMapping("/recuperar")
+//    public int recuperar(@RequestBody Usuario user) {
+//        List<Usuario> usuarios = usuarioRepository.findAll();
+//        Usuario u = usuarios.stream()
+//                .filter(usuario -> usuario.getEmail().equals(user.getEmail()))
+//                .findAny()
+//                .orElse(null);
+//
+//        if (u != null) {
+//            try {
+//                mail.sendSimpleMessage(u.getEmail(), "EAapp - Recuperación de contraseña",
+//                        "Estimado/a Usuario \n"
+//                        + "Muchas Gracias por recurrir a CONTROL AND DEVELOPMENT ONLINE OF CLAPA`Z S.A.S. \n"
+//                        + "\n"
+//                        + "A continuación te remitimos tus datos de ingreso. Para acceder a ella introduce las claves que a continuación te detallamos:\n\n"
+//                        + "Tu contraseña es: " + new String(Base64.decodeBase64(u.getClave())
+//                        ));
+//                return 1;
+//            } catch (MailException exception) {
+//                exception.printStackTrace();
+//                return 2;
+//            }
+//        } else {
+//            return 0;
+//        }
+//    }
 }

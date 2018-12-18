@@ -2,6 +2,7 @@ package com.poli.edu.EAappBack.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -37,7 +38,7 @@ public class Usuario implements Serializable {
     private String email;
 
     @NotBlank
-    @Size(max = 30)
+    @Size(max = 150)
     private String clave;
 
     @ManyToOne(fetch = FetchType.EAGER)

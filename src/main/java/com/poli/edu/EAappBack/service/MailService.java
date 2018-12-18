@@ -1,4 +1,4 @@
-package com.poli.edu.EAappBack.configuration;
+package com.poli.edu.EAappBack.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
@@ -7,7 +7,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 
 @Component
-public class Mail {
+public class MailService {
 
     @Autowired
     public JavaMailSender emailSender;
