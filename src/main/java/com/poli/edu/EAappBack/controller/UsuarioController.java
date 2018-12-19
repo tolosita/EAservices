@@ -23,8 +23,8 @@ public class UsuarioController {
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @Autowired
-    RoleRepository cargoRepository;
+//    @Autowired
+//    RoleRepository cargoRepository;
 
     // Get All Usuarios
     @GetMapping("/usuarios")
@@ -33,11 +33,11 @@ public class UsuarioController {
         return usuarioRepository.findAll();
     }
 
-    // Get All Cargos
-    @GetMapping("/cargos")
-    public List<Role> getAllCargos() {
-        return cargoRepository.findAll();
-    }
+//    // Get All Cargos
+//    @GetMapping("/cargos")
+//    public List<Role> getAllCargos() {
+//        return cargoRepository.findAll();
+//    }
 
     // Get a Single Usuario
     @GetMapping("/usuarios/{id}")

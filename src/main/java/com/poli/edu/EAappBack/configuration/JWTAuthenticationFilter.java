@@ -11,7 +11,8 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import java.io.IOException;
 import java.util.Date;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -20,7 +21,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -45,7 +45,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws java.io.IOException, ServletException {
         Claims cliams = Jwts.claims();
-        cliams.put("authorities", (List<GrantedAuthority>) authResult.getAuthorities());
+        cliams.put("authorities", authResult.getAuthorities());
 
         String token = Jwts.builder().setIssuedAt(new Date())
                 .setClaims(cliams)
@@ -55,6 +55,26 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .compact();
 
         response.addHeader(HEADER_AUTHORIZACION_KEY, TOKEN_BEARER_PREFIX + token);
+
+        Map<String, Object> body = new HashMap<>();
+        body.put("mensaje", "Inicio sesión correctamente");
+        body.put("token", token);
+        body.put("user", authResult.getPrincipal());
+
+        response.getWriter().write(new ObjectMapper().writeValueAsString(body));
+        response.setStatus(200);
+        response.setContentType("application/json");
+    }
+
+    @Override
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
+        Map<String, Object> body = new HashMap<>();
+        body.put("mensaje", "Email o clave incorrecto");
+        body.put("error", failed.getMessage());
+
+        response.getWriter().write(new ObjectMapper().writeValueAsString(body));
+        response.setStatus(401);
+        response.setContentType("application/json");
     }
 
 }
