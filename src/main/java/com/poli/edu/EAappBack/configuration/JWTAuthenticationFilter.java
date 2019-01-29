@@ -1,5 +1,6 @@
 package com.poli.edu.EAappBack.configuration;
 
+import static com.poli.edu.EAappBack.configuration.Constants.LOGIN_URL;
 import static com.poli.edu.EAappBack.configuration.Constants.HEADER_AUTHORIZACION_KEY;
 import static com.poli.edu.EAappBack.configuration.Constants.TOKEN_BEARER_PREFIX;
 import static com.poli.edu.EAappBack.configuration.Constants.TOKEN_EXPIRATION_TIME;
@@ -23,6 +24,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
@@ -30,6 +32,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     public JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
+        setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher(LOGIN_URL));
     }
 
     @Override
@@ -57,9 +60,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         response.addHeader(HEADER_AUTHORIZACION_KEY, TOKEN_BEARER_PREFIX + token);
 
         Map<String, Object> body = new HashMap<>();
-        body.put("mensaje", "Inicio sesión correctamente");
         body.put("token", token);
-        body.put("user", authResult.getPrincipal());
+        body.put("user", (User) authResult.getPrincipal());
 
         response.getWriter().write(new ObjectMapper().writeValueAsString(body));
         response.setStatus(200);
@@ -69,8 +71,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
         Map<String, Object> body = new HashMap<>();
-        body.put("mensaje", "Email o clave incorrecto");
-        body.put("error", failed.getMessage());
+        body.put("message", failed.getMessage());
 
         response.getWriter().write(new ObjectMapper().writeValueAsString(body));
         response.setStatus(401);

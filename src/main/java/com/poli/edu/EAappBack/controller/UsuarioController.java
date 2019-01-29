@@ -1,16 +1,16 @@
 package com.poli.edu.EAappBack.controller;
 
 import com.poli.edu.EAappBack.exception.ResourceNotFoundException;
-import com.poli.edu.EAappBack.model.Role;
 import com.poli.edu.EAappBack.model.Usuario;
 import com.poli.edu.EAappBack.repository.UsuarioRepository;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.poli.edu.EAappBack.repository.RoleRepository;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @RestController
@@ -23,21 +23,27 @@ public class UsuarioController {
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
-//    @Autowired
-//    RoleRepository cargoRepository;
+    // Get All Usuarios
+    @GetMapping("/usuario")
+    public Usuario getUsuarioLogged(Authentication authResult) {
+        Usuario user = usuarioRepository.findByEmail(authResult.getPrincipal().toString());
+        user.setClave(null);
+        return user;
+    }
 
     // Get All Usuarios
     @GetMapping("/usuarios")
-    @Secured("ADMIN")
+    @Secured("ROLE_ADMIN")
     public List<Usuario> getAllUsuarios() {
-        return usuarioRepository.findAll();
-    }
+        List<Usuario> usuarios = usuarioRepository.findAll().stream()
+                .map(user -> {
+                    user.setClave(null);
+                    return user;
+                })
+                .collect(Collectors.toList());
 
-//    // Get All Cargos
-//    @GetMapping("/cargos")
-//    public List<Role> getAllCargos() {
-//        return cargoRepository.findAll();
-//    }
+        return usuarios;
+    }
 
     // Get a Single Usuario
     @GetMapping("/usuarios/{id}")
@@ -48,7 +54,8 @@ public class UsuarioController {
 
     // Create a new Usuario
     @PostMapping("/usuarios")
-    public Usuario createUsuario(@Valid @RequestBody Usuario usuario) {
+    public Usuario createUsuario(@Valid
+            @RequestBody Usuario usuario) {
         usuario.setClave(bCryptPasswordEncoder.encode(usuario.getClave()));
         usuario.setEstado(true);
         return usuarioRepository.save(usuario);
@@ -57,7 +64,8 @@ public class UsuarioController {
     // Update a Usuario
     @PutMapping("/usuarios/{id}")
     public ResponseEntity<?> updateUsuario(@PathVariable(value = "id") Long codigo,
-            @Valid @RequestBody Usuario usuarioDetails) {
+            @Valid
+            @RequestBody Usuario usuarioDetails) {
 
         Usuario usuario = usuarioRepository.findById(codigo)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario", "id", codigo));
