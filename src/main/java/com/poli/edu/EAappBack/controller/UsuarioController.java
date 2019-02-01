@@ -16,10 +16,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @RestController
 @RequestMapping("/api")
 public class UsuarioController {
-
+    
     @Autowired
     UsuarioRepository usuarioRepository;
-
+    
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -34,14 +34,15 @@ public class UsuarioController {
     // Get All Usuarios
     @GetMapping("/usuarios")
     @Secured("ROLE_ADMIN")
-    public List<Usuario> getAllUsuarios() {
+    public List<Usuario> getAllUsuarios() throws InterruptedException {
+        
         List<Usuario> usuarios = usuarioRepository.findAll().stream()
                 .map(user -> {
                     user.setClave(null);
                     return user;
                 })
                 .collect(Collectors.toList());
-
+        Thread.sleep(3000L);
         return usuarios;
     }
 
@@ -66,19 +67,19 @@ public class UsuarioController {
     public ResponseEntity<?> updateUsuario(@PathVariable(value = "id") Long codigo,
             @Valid
             @RequestBody Usuario usuarioDetails) {
-
+        
         Usuario usuario = usuarioRepository.findById(codigo)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario", "id", codigo));
-
+        
         usuario.setNombre(usuarioDetails.getNombre());
         usuario.setApellidos(usuarioDetails.getApellidos());
         usuario.setFechaNacimiento(usuarioDetails.getFechaNacimiento());
         usuario.setDireccion(usuarioDetails.getDireccion());
         usuario.setEmail(usuarioDetails.getEmail());
         usuario.setClave(bCryptPasswordEncoder.encode(usuario.getClave()));
-
+        
         usuarioRepository.save(usuario);
-
+        
         return ResponseEntity.ok().build();
     }
 
@@ -87,10 +88,10 @@ public class UsuarioController {
     public ResponseEntity<?> deleteUsuario(@PathVariable(value = "id") Long codigo) {
         Usuario usuario = usuarioRepository.findById(codigo)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuario", "id", codigo));
-
+        
         usuario.setEstado(false);
         usuarioRepository.save(usuario);
-
+        
         return ResponseEntity.ok().build();
     }
 
