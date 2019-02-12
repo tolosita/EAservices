@@ -21,10 +21,8 @@ public class UsuarioDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String string) throws UsernameNotFoundException {
-        Usuario user = usuarioRepository.findByEmail(string);
-        if (user == null) {
-            throw new UsernameNotFoundException("Correo " + string + " no existe");
-        }
+        Usuario user = usuarioRepository.findByEmail(string)
+                .orElseThrow(() -> new UsernameNotFoundException("Correo " + string + " no existe"));
 
         List<GrantedAuthority> autority = new ArrayList<>();
         autority.add(new SimpleGrantedAuthority(user.getRole().getNombre()));
