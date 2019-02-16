@@ -37,7 +37,6 @@ public class Usuario implements Serializable {
     private String email;
 
     @NotBlank
-    @Size(max = 150)
     private String clave;
 
     @ManyToOne(fetch = FetchType.EAGER)

@@ -56,7 +56,7 @@ public class UsuarioController {
         return user;
     }
 
-    // Create and Update a new Usuario
+    // Create a new Usuario
     @PostMapping("/usuarios")
     @Secured("ROLE_ADMIN")
     public ResponseEntity<?> createUsuario(@Valid @RequestBody Usuario usuarioDetails) throws Exception {
@@ -93,7 +93,7 @@ public class UsuarioController {
         userUpdate.setClave(bCryptPasswordEncoder.encode(usuarioDetails.getClave()));
         userUpdate.setRole(usuarioDetails.getRole());
 
-        usuarioRepository.save(userExist);
+        usuarioRepository.save(userUpdate);
 
         return ResponseEntity.ok().build();
     }
@@ -114,23 +114,21 @@ public class UsuarioController {
     // Recuperar clave of a user
     @PostMapping("/recuperar")
     public ResponseEntity<?> recuperar(@RequestBody String email) throws Exception {
-        Usuario usuario = usuarioRepository.findByEmail(email).orElse(null);
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new Exception("El correo no se encuentra registrado en el sistema"));
 
-        if (usuario != null) {
-            try {
-                mail.sendSimpleMessage(usuario.getEmail(), "EAapp - Recuperación de contraseña",
-                        "Estimado/a Usuario \n"
-                        + "Muchas Gracias por recurrir a CONTROL AND DEVELOPMENT ONLINE OF CLAPA`Z S.A.S. \n"
-                        + "\n"
-                        + "A continuación te remitimos tus datos de ingreso. Para acceder a ella introduce las claves que a continuación te detallamos:\n\n"
-                        + "Tu contraseña es: " + usuario.getClave()
-                );
-                return ResponseEntity.ok().build();
-            } catch (MailException exception) {
-                throw new Exception(exception.getMessage());
-            }
-        } else {
-            throw new Exception("El correo no se encuentra registrado en el sistema");
+        try {
+            mail.sendSimpleMessage(usuario.getEmail(), "EAapp - Recuperación de contraseña",
+                    "Estimado/a Usuario \n"
+                    + "Muchas Gracias por recurrir a CONTROL AND DEVELOPMENT ONLINE OF CLAPA`Z S.A.S. \n"
+                    + "\n"
+                    + "A continuación te remitimos tus datos de ingreso. Para acceder a ella introduce las claves que a continuación te detallamos:\n\n"
+                    + "Tu contraseña es: " + usuario.getClave()
+            );
+        } catch (MailException exception) {
+            throw new Exception(exception.getMessage());
         }
+
+        return ResponseEntity.ok().build();
     }
 }
