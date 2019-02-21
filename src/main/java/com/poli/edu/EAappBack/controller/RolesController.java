@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * @author Alejandro Diez
+ */
 @RestController
 @RequestMapping("/api")
 public class RolesController {
@@ -16,10 +19,15 @@ public class RolesController {
     @Autowired
     RoleRepository roleRepository;
 
-    // Get All Usuarios
+    /**
+     * Metodo que devuelve los roles que estan en la base de datos
+     *
+     * @return listado de roles de la aplicacion
+     */
     @GetMapping("/roles")
     @Secured("ROLE_ADMIN")
     public List<Role> getAllRoles() {
         return roleRepository.findAll();
     }
+
 }
