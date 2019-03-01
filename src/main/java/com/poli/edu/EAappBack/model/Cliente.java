@@ -35,30 +35,49 @@ public class Cliente implements Serializable {
     @JoinColumn(name = "tipoDocumento", nullable = false)
     private TipoDocumento tipoDocumento;
 
-    @NotBlank
+    @NotNull
     @Size(max = 50)
     private String nroDocumento;
 
-    @NotBlank
+    @NotNull
     @Size(max = 50)
     private String nombre;
 
-    @NotBlank
+    @NotNull
     @Size(max = 50)
     private String apellidos;
+
+    @NotNull
+    @Size(max = 100)
+    private String email;
+
+    @NotNull
+    @Size(max = 20)
+    private String telefono;
+
+    @NotNull
+    @Size(max = 30)
+    private String celular;
 
     @NotNull
     @Size(max = 80)
     private String direccion;
 
     @NotNull
-    @Size(max = 20)
-    private String telefono;
+    @Size(max = 80)
+    private String pais;
+
+    @NotNull
+    @Size(max = 80)
+    private String cuidad;
 
     @Column(nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     @CreatedDate
     private Date fechaIngreso;
+
+    @NotNull
+    private boolean estado;
 
     public Long getId() {
         return id;
@@ -122,6 +141,14 @@ public class Cliente implements Serializable {
 
     public void setFechaIngreso(Date fechaIngreso) {
         this.fechaIngreso = fechaIngreso;
+    }
+
+    public boolean isEstado() {
+        return estado;
+    }
+
+    public void setEstado(boolean estado) {
+        this.estado = estado;
     }
 
 }
