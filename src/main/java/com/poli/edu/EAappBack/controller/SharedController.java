@@ -1,7 +1,9 @@
 package com.poli.edu.EAappBack.controller;
 
 import com.poli.edu.EAappBack.model.Role;
+import com.poli.edu.EAappBack.model.TipoDocumento;
 import com.poli.edu.EAappBack.repository.RoleRepository;
+import com.poli.edu.EAappBack.repository.TipoDocumentoRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -14,10 +16,13 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/api")
-public class RolesController {
+public class SharedController {
 
     @Autowired
     RoleRepository roleRepository;
+
+    @Autowired
+    TipoDocumentoRepository tipoDocumentoRepository;
 
     /**
      * Metodo que devuelve los roles que estan en la base de datos
@@ -30,4 +35,9 @@ public class RolesController {
         return roleRepository.findAll();
     }
 
+    @GetMapping("/tipoDocumentos")
+    @Secured("ROLE_ADMIN")
+    public List<TipoDocumento> getAllTipoDocumentos() {
+        return tipoDocumentoRepository.findAll();
+    }
 }
