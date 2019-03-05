@@ -51,7 +51,10 @@ public class Garantia implements Serializable {
     @Size(max = 20)
     private String nroFactura;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "garantia")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "garantia_referencia")
+    private Set<Referencia> refencia = new HashSet<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "garantia_causa")
     private Set<Causa> causas = new HashSet<>();
 
     public Long getId() {
@@ -108,6 +111,14 @@ public class Garantia implements Serializable {
 
     public void setNroFactura(String nroFactura) {
         this.nroFactura = nroFactura;
+    }
+
+    public Set<Referencia> getRefencia() {
+        return refencia;
+    }
+
+    public void setRefencia(Set<Referencia> refencia) {
+        this.refencia = refencia;
     }
 
     public Set<Causa> getCausas() {
