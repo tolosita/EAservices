@@ -35,10 +35,6 @@ public class Garantia implements Serializable {
     @Size(max = 50)
     private String boutique;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "cliente", nullable = false)
-    private Cliente cliente;
-
     @NotBlank
     @Size(max = 30)
     private String email;
@@ -47,15 +43,18 @@ public class Garantia implements Serializable {
     @Size(max = 20)
     private String telefono;
 
-    @NotBlank
-    @Size(max = 20)
-    private String nroFactura;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "garantia_referencia")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "garantia")
     private Set<Referencia> refencia = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "garantia_causa")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "garantia")
     private Set<Causa> causas = new HashSet<>();
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "usuario", nullable = false)
+    private Usuario usuario;
+
+    @NotNull
+    private int estado;
 
     public Long getId() {
         return id;
@@ -81,14 +80,6 @@ public class Garantia implements Serializable {
         this.boutique = boutique;
     }
 
-    public Cliente getCliente() {
-        return cliente;
-    }
-
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
-    }
-
     public String getEmail() {
         return email;
     }
@@ -105,14 +96,6 @@ public class Garantia implements Serializable {
         this.telefono = telefono;
     }
 
-    public String getNroFactura() {
-        return nroFactura;
-    }
-
-    public void setNroFactura(String nroFactura) {
-        this.nroFactura = nroFactura;
-    }
-
     public Set<Referencia> getRefencia() {
         return refencia;
     }
@@ -127,6 +110,22 @@ public class Garantia implements Serializable {
 
     public void setCausas(Set<Causa> causas) {
         this.causas = causas;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public int getEstado() {
+        return estado;
+    }
+
+    public void setEstado(int estado) {
+        this.estado = estado;
     }
 
 }

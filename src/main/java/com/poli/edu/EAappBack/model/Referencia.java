@@ -38,6 +38,14 @@ public class Referencia implements Serializable {
     @NotNull
     private int total;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "cliente", nullable = false)
+    private Cliente cliente;
+
+    @NotBlank
+    @Size(max = 20)
+    private String nroFactura;
+
     @NotBlank
     @Size(max = 50)
     private String observaciones;
@@ -88,6 +96,22 @@ public class Referencia implements Serializable {
 
     public void setTotal(int total) {
         this.total = total;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
+    public String getNroFactura() {
+        return nroFactura;
+    }
+
+    public void setNroFactura(String nroFactura) {
+        this.nroFactura = nroFactura;
     }
 
     public String getObservaciones() {
