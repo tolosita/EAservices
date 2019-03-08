@@ -35,11 +35,11 @@ public class Garantia implements Serializable {
     @Size(max = 50)
     private String boutique;
 
-    @NotBlank
+    @NotNull
     @Size(max = 30)
     private String email;
 
-    @NotBlank
+    @NotNull
     @Size(max = 20)
     private String telefono;
 

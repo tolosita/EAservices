@@ -1,7 +1,9 @@
 package com.poli.edu.EAappBack.controller;
 
+import com.poli.edu.EAappBack.model.Causa;
 import com.poli.edu.EAappBack.model.Role;
 import com.poli.edu.EAappBack.model.TipoDocumento;
+import com.poli.edu.EAappBack.repository.CausaRepository;
 import com.poli.edu.EAappBack.repository.RoleRepository;
 import com.poli.edu.EAappBack.repository.TipoDocumentoRepository;
 import java.util.List;
@@ -24,6 +26,9 @@ public class SharedController {
     @Autowired
     TipoDocumentoRepository tipoDocumentoRepository;
 
+    @Autowired
+    CausaRepository causaRepository;
+
     /**
      * Metodo que devuelve los roles que estan en la base de datos
      *
@@ -40,4 +45,10 @@ public class SharedController {
     public List<TipoDocumento> getAllTipoDocumentos() {
         return tipoDocumentoRepository.findAll();
     }
+
+    @GetMapping("/causas")
+    public List<Causa> getAllCausas() {
+        return causaRepository.findAll();
+    }
+
 }
