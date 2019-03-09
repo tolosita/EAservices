@@ -55,7 +55,7 @@ public class Referencia implements Serializable {
     private Date fechaRecibido;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "garantia_id", insertable = false, updatable = false)
+    @JoinColumn(name = "garantia_id")
     private Garantia garantia;
 
     public Long getId() {

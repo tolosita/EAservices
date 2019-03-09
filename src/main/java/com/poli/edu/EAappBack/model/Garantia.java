@@ -43,12 +43,6 @@ public class Garantia implements Serializable {
     @Size(max = 20)
     private String telefono;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "garantia")
-    private Set<Referencia> refencia = new HashSet<>();
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "garantia")
-    private Set<Causa> causas = new HashSet<>();
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "usuario", nullable = false)
     private Usuario usuario;
@@ -94,22 +88,6 @@ public class Garantia implements Serializable {
 
     public void setTelefono(String telefono) {
         this.telefono = telefono;
-    }
-
-    public Set<Referencia> getRefencia() {
-        return refencia;
-    }
-
-    public void setRefencia(Set<Referencia> refencia) {
-        this.refencia = refencia;
-    }
-
-    public Set<Causa> getCausas() {
-        return causas;
-    }
-
-    public void setCausas(Set<Causa> causas) {
-        this.causas = causas;
     }
 
     public Usuario getUsuario() {
