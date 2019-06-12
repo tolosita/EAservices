@@ -9,6 +9,7 @@ public class Constants {
     // Spring Security
     public static final String LOGIN_URL = "/api/login";
     public static final String RECUPERAR_URL = "/api/recuperar";
+    public static final String RESTABLECER_URL = "/api/restablecer/{id}";
     public static final String HEADER_AUTHORIZACION_KEY = "Authorization";
     public static final String TOKEN_BEARER_PREFIX = "Bearer ";
     // JWT

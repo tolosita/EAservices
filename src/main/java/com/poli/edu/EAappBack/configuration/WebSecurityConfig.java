@@ -2,6 +2,7 @@ package com.poli.edu.EAappBack.configuration;
 
 import static com.poli.edu.EAappBack.configuration.Constants.LOGIN_URL;
 import static com.poli.edu.EAappBack.configuration.Constants.RECUPERAR_URL;
+import static com.poli.edu.EAappBack.configuration.Constants.RESTABLECER_URL;
 
 import com.poli.edu.EAappBack.service.UsuarioDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .cors().and()
                 .csrf().disable()
-                .authorizeRequests().antMatchers(LOGIN_URL).permitAll().antMatchers(RECUPERAR_URL).permitAll()
+                .authorizeRequests().antMatchers(LOGIN_URL).permitAll().antMatchers(RECUPERAR_URL).permitAll().antMatchers(RESTABLECER_URL).permitAll()
                 .anyRequest().authenticated().and()
                 .addFilter(new JWTAuthenticationFilter(authenticationManager()))
                 .addFilter(new JWTAuthorizationFilter(authenticationManager()));

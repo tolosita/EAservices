@@ -119,15 +119,30 @@ public class UsuarioController {
 
         try {
             mail.sendSimpleMessage(usuario.getEmail(), "EAapp - Recuperación de contraseña",
-                    "Estimado/a Usuario \n"
-                    + "Muchas Gracias por recurrir a CONTROL AND DEVELOPMENT ONLINE OF CLAPA`Z S.A.S. \n"
+                    "Estimado/a Usuario\n\n"
+                    + "Muchas Gracias por recurrir a CONTROL AND DEVELOPMENT ONLINE OF CLAPA`Z S.A.S.\n"
                     + "\n"
-                    + "A continuación te remitimos tus datos de ingreso. Para acceder a ella introduce las claves que a continuación te detallamos:\n\n"
-                    + "Tu contraseña es: " + usuario.getClave()
+                    + "Hemos recibido una solicitud para el cambio de contraseña. Si no has sido tú, ignora este correo.\n"
+                    + "\n"
+                    + "Por favor ingresa en el siguiente Link para que puedas restablecerla:\n"
+                    + "<a href=\"http://localhost:4200/restablecer/" + usuario.getId() + " \" >Recuperar cuenta</a>"
             );
         } catch (MailException exception) {
             throw new Exception(exception.getMessage());
         }
+
+        return ResponseEntity.ok().build();
+    }
+
+    // Restablecer clave of a user
+    @PostMapping("/restablecer/{id}")
+    public ResponseEntity<?> restablecer(@PathVariable(value = "id") Long codigo, @Valid @RequestBody String clave) throws Exception {
+        Usuario userUpdate = usuarioRepository.findById(codigo)
+                .orElseThrow(() -> new Exception("El usuario no se encuentra registrado en el sistema"));
+
+        userUpdate.setClave(bCryptPasswordEncoder.encode(clave));
+
+        usuarioRepository.save(userUpdate);
 
         return ResponseEntity.ok().build();
     }
